@@ -1,1 +1,109 @@
-venv/\n__pycache__/\ndata/\n.env
+# ========================
+# Python
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ========================
+# Virtual Environments
+# ========================
+.venv/
+venv/
+ENV/
+env/
+
+# ========================
+# Environment & Secrets
+# ========================
+.env
+.env.*
+!.env.example
+
+# ========================
+# Data & Artifacts
+# ========================
+data/
+*.zip
+*.tar.gz
+*.tar.bz2
+*.rar
+*.7z
+
+# ========================
+# Model Weights & Checkpoints
+# ========================
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.gguf
+checkpoints/
+output/
+outputs/
+runs/
+wandb/
+mlruns/
+
+# ========================
+# Jupyter Notebooks
+# ========================
+.ipynb_checkpoints/
+*.ipynb_meta
+
+# ========================
+# IDE & Editor
+# ========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ========================
+# OS Files
+# ========================
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# ========================
+# Logs & Temp
+# ========================
+*.log
+logs/
+tmp/
+temp/
+
+# ========================
+# Package Manager
+# ========================
+uv.lock
+
+# ========================
+# Misc
+# ========================
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
