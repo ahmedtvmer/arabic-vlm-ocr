@@ -94,6 +94,7 @@ temp/
 # Package Manager
 # ========================
 uv.lock
+.env
 
 # ========================
 # Misc
