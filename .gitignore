@@ -12,6 +12,7 @@ eggs/
 *.manifest
 *.spec
 pip-log.txt
+.vscode
 
 # ========================
 # Virtual Environments
