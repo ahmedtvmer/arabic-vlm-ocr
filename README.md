@@ -320,8 +320,8 @@ The fine-tuning process was executed using **Parameter-Efficient Fine-Tuning (PE
 
 | Metric | Start | End | Improvement |
 | :--- | :--- | :--- | :--- |
-| **Training Loss** | 1.2 | **0.01** | ~99% |
-| **Evaluation Loss** | 1.5 | **0.15** | ~90% |
+| **Training Loss** | 1.2 | **0.05** | ~95% |
+| **Evaluation Loss** | 1.5 | **0.14** | ~90% |
 
 ### Qualitative Analysis
 
