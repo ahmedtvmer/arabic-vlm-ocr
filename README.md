@@ -329,6 +329,11 @@ cd llama.cpp
 cmake -B build
 cmake --build build --config Release -j$(nproc)
 cd ..
+./llama.cpp/build/bin/llama-server \
+    -m model_weights/qwen2-vl-arabic-ocr-q4_k_m.gguf \
+    --mmproj model_weights/qwen2-vl-arabic-mmproj.gguf \
+    --alias qwen2-vl-arabic-ocr-merged \
+    -ngl 99 --port 8080
 ```
 
 ---

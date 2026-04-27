@@ -1,3 +1,9 @@
+# ── Agentic Orchestration ─────────────────
+langgraph
+langchain
+langchain-openai    
+pydantic
+
 # ── API Clients ───────────────────────────
 openai
 google-genai
