@@ -1,0 +1,11 @@
+# ── API Clients ───────────────────────────
+openai
+google-genai
+
+# ── Data Pipeline & Preprocessing ─────────
+pdf2image
+Pillow
+
+# ── Environment & Utilities ───────────────
+python-dotenv
+tqdm

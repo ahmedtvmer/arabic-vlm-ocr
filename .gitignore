@@ -8,12 +8,10 @@ __pycache__/
 *.egg
 *.egg-info/
 dist/
-build/
 eggs/
 *.manifest
 *.spec
 pip-log.txt
-pip-delete-this-directory.txt
 
 # ========================
 # Virtual Environments
@@ -22,6 +20,11 @@ pip-delete-this-directory.txt
 venv/
 ENV/
 env/
+
+# ========================
+# Package Manager
+# ========================
+# Note: uv.lock is intentionally NOT ignored to ensure reproducible builds.
 
 # ========================
 # Environment & Secrets
@@ -34,6 +37,11 @@ env/
 # Data & Artifacts
 # ========================
 data/
+dataset/
+*.csv
+*.tsv
+*.jsonl
+*.parquet
 *.zip
 *.tar.gz
 *.tar.bz2
@@ -43,6 +51,8 @@ data/
 # ========================
 # Model Weights & Checkpoints
 # ========================
+model_weights/
+adapters/
 *.bin
 *.pt
 *.pth
@@ -55,6 +65,18 @@ outputs/
 runs/
 wandb/
 mlruns/
+.huggingface/
+
+# ========================
+# C/C++ Builds (CMake)
+# ========================
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+compile_commands.json
+build/
+bin/
 
 # ========================
 # Jupyter Notebooks
@@ -83,22 +105,12 @@ desktop.ini
 *.lnk
 
 # ========================
-# Logs & Temp
+# Logs, Temp & Caches
 # ========================
 *.log
 logs/
 tmp/
 temp/
-
-# ========================
-# Package Manager
-# ========================
-uv.lock
-.env
-
-# ========================
-# Misc
-# ========================
 .cache/
 .pytest_cache/
 .mypy_cache/
