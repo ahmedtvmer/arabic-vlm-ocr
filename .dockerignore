@@ -1,0 +1,49 @@
+# =========================
+# Git
+# =========================
+.git
+.gitignore
+*.gitkeep
+
+# =========================
+# Python & Environments
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+
+# =========================
+# Secrets (CRITICAL)
+# =========================
+# Never send .env to the build context. 
+# Docker Compose handles injecting these at runtime.
+.env
+
+# =========================
+# Heavy Data & Model Weights
+# =========================
+# These are mounted via Docker volumes, DO NOT bake them into the image
+model_weights/
+data/
+test_data/
+
+# =========================
+# Training & Source Code
+# =========================
+# We use the official pre-built ghcr.io image for the server, 
+# so we don't need the local C++ source or build artifacts.
+llama.cpp/
+build/
+*.ipynb
+
+# =========================
+# IDEs & OS Files
+# =========================
+.vscode/
+.idea/
+.DS_Store
+*.swp

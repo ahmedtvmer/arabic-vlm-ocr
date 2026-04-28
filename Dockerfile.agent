@@ -1,0 +1,19 @@
+# Dockerfile.agent
+FROM python:3.12-slim
+
+# Install uv for blazingly fast dependency resolution
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+WORKDIR /app
+
+# Copy only the inference requirements
+COPY requirements.txt .
+
+# Install dependencies into the system environment (it's Docker, no need for venv)
+RUN uv pip install --system -r requirements.txt
+
+# Copy your agent script and any necessary files
+COPY agent.py .
+
+# Default command to run the agent
+CMD ["python", "agent.py"]

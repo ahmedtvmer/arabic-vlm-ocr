@@ -1,0 +1,43 @@
+services:
+  # ----------------------------------------
+  # 1. The VLM Server (C++ / CUDA)
+  # ----------------------------------------
+  vlm-server:
+    image: ghcr.io/ggml-org/llama.cpp:server-cuda
+    container_name: qwen-vlm-server
+    ports:
+      - "8080:8080"
+    volumes:
+      # Mount your local model weights into the container
+      - ./model_weights:/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+    # The exact command you ran locally, but paths point to the container's /models dir
+    # --host 0.0.0.0 is MANDATORY inside Docker to allow external connections
+    command: >
+      -m /models/qwen2-vl-arabic-ocr-q4_k_m.gguf --mmproj /models/qwen2-vl-arabic-mmproj.gguf --alias qwen2-vl-arabic-ocr-merged -ngl 99 --host 0.0.0.0 --port 8080 -c 4096 --parallel 1
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  agent:
+    volumes:
+      - ./test_data:/app/test_data
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    container_name: ocr-langgraph-agent
+    environment:
+      # Pass your API keys from your host's .env file
+      - GOOGLE_API_KEY=${GOOGLE_GENAI_API_KEY}
+    depends_on:
+      vlm-server:
+        condition: service_healthy

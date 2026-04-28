@@ -2,6 +2,7 @@
 langgraph
 langchain
 langchain-openai    
+langchain-google-genai    
 pydantic
 
 # ── API Clients ───────────────────────────

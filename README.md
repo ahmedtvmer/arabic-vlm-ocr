@@ -18,9 +18,11 @@ The model takes a scanned page image as input and returns a structured JSON obje
 - [Stage 6 — GGUF Quantization](#stage-6--gguf-quantization)
 - [Stage 7 — Local Inference](#stage-7--local-inference)
 - [Stage 8 — Running agent](#stage-8--running-agent)
+- [Stage 9 — Production Deployment](#stage-9--production-deployment-docker-compose)
 - [Output Schema](#output-schema)
 - [Evaluation & Results](#evaluation--results)
-- [Setup](#setup)
+- [Quick Start (Docker)](#quick-start-docker)
+- [Development Setup](#development-setup)
 - [License](#license)
 
 ---
@@ -67,6 +69,10 @@ arabic-vlm-ocr/
 ├── merge.py                        # Merge LoRA adapters into base model
 ├── test_gguf.py                    # Test quantized model via OpenAI-compatible API
 ├── test_data/                      # Sample images for manual testing
+├── agent.py                        # LangGraph agentic OCR orchestrator
+├── Dockerfile.agent                # Container image for the agent service
+├── docker-compose.yml              # Full-stack deployment (VLM server + agent)
+├── .dockerignore                   # Build context exclusions
 ├── requirements.txt
 └── pyproject.toml
 ```
@@ -280,6 +286,29 @@ Run the orchestrator script using `uv`:
 uv run python agent.py
 ```
 
+## Stage 9 — Production Deployment (Docker Compose)
+
+To deploy this pipeline as a production-ready microservice, the architecture is fully containerized. It deliberately separates the heavy C++ VLM inference engine from the lightweight Python LangGraph orchestrator to maximize memory efficiency and scalability.
+
+### Architecture
+1. **VLM Server (`vlm-server`)**: Leverages the official `llama.cpp` CUDA image to serve the 4-bit GGUF model via an OpenAI-compatible API. Model weights are mounted dynamically via volumes to maintain a minimal container footprint. Context limits are strictly enforced (`-c 4096`) to prevent VRAM overflow.
+2. **LangGraph Agent (`agent`)**: A lean Python container that executes the multi-node reasoning, schema enforcement, and validation loop. A health-check gate ensures it only starts after the VLM server has fully loaded the model.
+
+### Prerequisites
+* **Hardware Acceleration:** [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) must be installed on the host for GPU passthrough to the VLM server.
+* **Environment Variables:** A `.env` file in the root directory containing your `GOOGLE_GENAI_API_KEY` for the reasoning node.
+
+### Execution
+Boot the entire pipeline with a single command:
+
+```bash
+docker compose up --build
+```
+
+The VLM server will load the GGUF model and expose an OpenAI-compatible API on port `8080`. Once healthy, the agent container starts automatically and runs the full extraction → validation pipeline.
+
+---
+
 ## Output Schema
 
 Every model response follows this structured JSON schema:
@@ -335,7 +364,40 @@ The fine-tuning process was executed using **Parameter-Efficient Fine-Tuning (PE
 | :--- | :--- | :--- | :--- |
 | **Laptop GPU (4GB VRAM)** | llama.cpp | Q4_K_M | ~12-15 t/s |
 
-## Setup
+### Dockerized Pipeline Validation
+
+The full containerized pipeline (VLM extraction → Gemini validation) was tested end-to-end via `docker compose up --build`. The agent successfully processed an Arabic legal regulation document and returned:
+
+```
+Status: Successfully processed regulation. Confidence: 0.95
+```
+
+---
+
+## Quick Start (Docker)
+
+The fastest way to run the full pipeline. Requires only Docker and an NVIDIA GPU.
+
+```bash
+# Clone the repository
+git clone --recurse-submodules https://github.com/ahmedtvmer/arabic-vlm-ocr.git
+cd arabic-vlm-ocr
+
+# Set up environment variables
+cp ".env example" .env
+# Edit .env and add your GOOGLE_GENAI_API_KEY
+
+# Launch the full stack
+docker compose up --build
+```
+
+> **Prerequisites:** [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) must be installed for GPU passthrough. Model weights must be present in `model_weights/`.
+
+---
+
+## Development Setup
+
+For contributors who need to run individual pipeline stages (data preprocessing, distillation, training) outside of Docker.
 
 ### Prerequisites
 

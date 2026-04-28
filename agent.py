@@ -8,6 +8,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import StateGraph, END
 from typing_extensions import TypedDict
 
+
 class LegalArticle(BaseModel):
     article_number: str
     content: str
@@ -32,7 +33,7 @@ def extraction_node(state: AgentState):
     with open(state["image_path"], "rb") as f:
         img_b64 = base64.b64encode(f.read()).decode('utf-8')
 
-    client = OpenAI(base_url="http://localhost:8080/v1", api_key="local")
+    client = OpenAI(base_url="http://vlm-server:8080/v1", api_key="local")
     
     response = client.chat.completions.create(
         model="qwen2-vl-arabic-ocr-merged",
@@ -84,8 +85,9 @@ workflow.add_edge("validate", END)
 app = workflow.compile()
 
 if __name__ == "__main__":
-    # Ensure llama-server is running on :8080
-    config = {"image_path": "./test_data/page_002.jpg"}
+    import sys
+    image_path = sys.argv[1] if len(sys.argv) > 1 else "./test_data/page_002.jpg"
+    config = {"image_path": image_path}
     
     result = app.invoke(config)
     
