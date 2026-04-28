@@ -13,7 +13,7 @@ COPY requirements.txt .
 RUN uv pip install --system -r requirements.txt
 
 # Copy your agent script and any necessary files
-COPY agent.py .
+COPY scripts/agent.py ./scripts/agent.py
 
 # Default command to run the agent
-CMD ["python", "agent.py"]
+CMD ["python", "scripts/agent.py"]

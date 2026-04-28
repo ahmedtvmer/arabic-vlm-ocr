@@ -38,6 +38,7 @@ services:
     environment:
       # Pass your API keys from your host's .env file
       - GOOGLE_API_KEY=${GOOGLE_GENAI_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
     depends_on:
       vlm-server:
         condition: service_healthy

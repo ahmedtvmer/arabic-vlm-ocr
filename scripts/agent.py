@@ -3,10 +3,11 @@ import json
 from typing import List, Optional, Literal
 from pydantic import BaseModel, Field
 from openai import OpenAI
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, SystemMessage
 from langgraph.graph import StateGraph, END
 from typing_extensions import TypedDict
+import os
+from langchain_openai import ChatOpenAI
 
 
 class LegalArticle(BaseModel):
@@ -52,7 +53,12 @@ def validation_reasoning_node(state: AgentState):
     """Uses a high-tier LLM to validate the local output and clean up hallucinations."""
     print(" [Step 2] Reasoning Node: Validating and cleaning data...")
     
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
+    llm = ChatOpenAI(
+        base_url="https://openrouter.ai/api/v1",
+        api_key=os.environ.get("OPENROUTER_API_KEY"),
+        model="google/gemma-4-26b-a4b-it:free",
+        temperature=0
+    )
     
     structured_llm = llm.with_structured_output(OCRResult)
     
