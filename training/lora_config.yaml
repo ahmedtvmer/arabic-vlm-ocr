@@ -1,0 +1,48 @@
+# ==========================================
+# Qwen2-VL-1.5B LoRA Fine-Tuning Configuration
+# ==========================================
+
+# --- Model & Data Paths ---
+model_name_or_path: "Qwen/Qwen2-VL-2B-Instruct"
+dataset_path: "data/04_training_data/train.jsonl"
+eval_dataset_path: "data/04_training_data/eval.jsonl"
+output_dir: "model_weights/adapters"
+
+# --- LoRA (PEFT) Parameters ---
+peft_type: "LORA"
+r: 32
+lora_alpha: 64
+lora_dropout: 0.05
+bias: "none"
+task_type: "CAUSAL_LM"
+target_modules:
+  - "q_proj"
+  - "k_proj"
+  - "v_proj"
+  - "o_proj"
+  - "gate_proj"
+  - "up_proj"
+  - "down_proj"
+
+# --- Training Hyperparameters ---
+num_train_epochs: 3
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 8
+learning_rate: 1.0e-4
+max_grad_norm: 1.0
+warmup_ratio: 0.1
+lr_scheduler_type: "cosine"
+
+# --- Memory & Hardware Optimization ---
+optim: "adamw_8bit"
+bf16: true
+tf32: false
+gradient_checkpointing: true
+
+# --- Logging & Evaluation ---
+logging_steps: 10
+save_steps: 50
+eval_strategy: "epoch"
+save_strategy: "epoch"
+save_total_limit: 2
+report_to: "tensorboard"
