@@ -60,7 +60,7 @@ def main() -> None:
                 continue
 
             # Re-format the parsed dictionary into a clean, pretty-printed string.
-            clean_output_string = json.dumps(parsed_output, indent=2, ensure_ascii=False)
+            clean_output_string = json.dumps(parsed_output, indent=2, ensure_ascii=True)
 
             # Requirement 6-8: Construct ShareGPT record.
             sharegpt_record = {
@@ -81,7 +81,7 @@ def main() -> None:
 
     # Requirement 9: Save master list to output JSON.
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f_out:
-        json.dump(sharegpt_records, f_out, indent=2, ensure_ascii=False)
+        json.dump(sharegpt_records, f_out, indent=2, ensure_ascii=True)
 
 
 if __name__ == "__main__":
